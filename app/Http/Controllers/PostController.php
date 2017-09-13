@@ -17,8 +17,9 @@ class PostController extends Controller
         return Post::where('user_id', '=', \Auth::user()->id)->get();
     }
 
-    public function detail($id)
+    public function detail(Request $request)
     {
+        $id = intval($request->get('id'));
         $post = Post::find($id);
         if (! $post) {
             return response()->json([
@@ -45,8 +46,9 @@ class PostController extends Controller
         return $post;
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $id = intval($request->get('id'));
         $post = Post::find($id);
 
         if (!$post) {
@@ -62,8 +64,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function delete(Request $request, $id)
+    public function delete(Request $request)
     {
+        $id = intval($request->get('id'));
         $post = Post::find($id);
 
         if (!$post) {

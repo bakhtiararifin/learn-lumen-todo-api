@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['only' => ['changePassword']]);
+    }
+
     public function register(Request $request)
     {
         $this->validate($request, [
@@ -44,15 +47,15 @@ class AuthController extends Controller
         return $user;
     }
 
-    public function changePassword(Request $request, $id)
+    public function changePassword(Request $request)
     {
-        $user = Auth::user();
+        $user = \Auth::user();
 
-        Validator::extend('correct_password', function($attribute, $value) use ($user) {
+        \Validator::extend('correct_password', function($attribute, $value) use ($user) {
             return Hash::check($value, $user->password);
         });
 
-        $validator = Validator::make($request->all(), [
+        $validator = \Validator::make($request->all(), [
             'old_password' => 'required|correct_password',
             'new_password' => 'required|min:6',
             'confirm_new_password' => 'required|min:6|same:new_password',
@@ -61,7 +64,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 404);
+            return response()->json($validator->errors(), 422);
         }
 
         $user->password = Hash::make($request->get('new_password'));

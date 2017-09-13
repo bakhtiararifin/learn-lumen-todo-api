@@ -17,10 +17,10 @@ $app->get('/', function () use ($app) {
 
 $app->post('/register', 'AuthController@register');
 $app->post('/login', 'AuthController@login');
-$app->post('/change-password/{id}', 'AuthController@changePassword');
+$app->post('/change-password', 'AuthController@changePassword');
 
-$app->get('/posts', 'PostController@index');
-$app->get('/posts/{id}', 'PostController@detail');
+$app->post('/posts', 'PostController@index');
+$app->post('/posts/detail', 'PostController@detail');
 $app->post('/posts/add', 'PostController@add');
-$app->post('/posts/update/{id}', 'PostController@update');
-$app->post('/posts/delete/{id}', 'PostController@delete');
+$app->post('/posts/update', 'PostController@update');
+$app->post('/posts/delete', 'PostController@delete');
